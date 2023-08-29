@@ -9,6 +9,8 @@
 #define P_WIDTH 150
 #define P_HEIGHT 100
 #define PI 3.14159265358979323846264
+#define CENTER_X 960
+#define CENTER_Y 540
 
 int main( int argc, char* args[] ){
     SDL_Init( SDL_INIT_EVERYTHING );
@@ -29,7 +31,7 @@ int main( int argc, char* args[] ){
     
     int i = 1000;
     float x_pos, y_pos, x_i, y_i;
-    float r = 100;
+    float r = 125;
     SDL_Rect hitbox;
     x_pos = x_i = WIDTH/2 - P_WIDTH/2;
     y_pos = y_i = HEIGHT/2; 
@@ -51,13 +53,13 @@ int main( int argc, char* args[] ){
         }
 
         // "Frame" logic
-        hitbox.x = (r * -1 * cos(x_pos))  + x_i/2;
-        hitbox.y = (r * -1 * sin(y_pos))  + y_i/2;
+        hitbox.x = (r * -1 * cos(2 * PI * x_pos)) + 300;
+        hitbox.y = (r * -1 * sin(2 * PI * y_pos)) + 250;
         SDL_RenderClear(sdlRenderer);
         SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, &hitbox);
         SDL_RenderPresent(sdlRenderer);
         SDL_Delay(175);
-        --i, x_pos += PI/24, y_pos += PI/24;
+        --i, x_pos += PI/48, y_pos += PI/48;
     }
 
     SDL_Quit();
