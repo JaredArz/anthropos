@@ -1,13 +1,15 @@
 BIN          = anthropos
-SDL_INC_PATH = /opt/homebrew/Cellar/sdl2/2.28.2/include/SDL2 
-SDL_LIB_PATH = /opt/homebrew/Cellar/sdl2/2.28.2/lib  
+# dont use for portability, include <SDL2/SDL.h> and let compiler detect implementation set path
+# if not working, then hardcode paths like below with -I -L
+#SDL_INC_PATH = /opt/homebrew/Cellar/sdl2/2.28.2/include/SDL2 
+#SDL_LIB_PATH = /opt/homebrew/Cellar/sdl2/2.28.2/lib  
 SDL_LIBS     = -lSDL2main -lSDL2
 FLAGS        = -Wall
 
 all: BIN
 
 BIN: main.cpp
-	g++ ${FLAGS} main.cpp -I ${SDL_INC_PATH} -L ${SDL_LIB_PATH} ${SDL_LIBS} -o ${BIN}
+	g++ ${FLAGS} main.cpp ${SDL_LIBS} -o ${BIN}
 
 clean: rm -f BIN main.o
 
