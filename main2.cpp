@@ -1,6 +1,9 @@
+/*This source code copyrighted by Lazy Foo' Productions 2004-2023
+and may not be redistributed without written permission.*/
 #include <stdio.h>
 #include <math.h>
 #include <SDL2/SDL.h>
+
 
 #define SCREEN_WIDTH  800
 #define SCREEN_HEIGHT 600
@@ -12,26 +15,28 @@
 #define CENTER_X 960
 #define CENTER_Y 540
 
-int main( int argc, char* args[] ){
-    printf("entry");
-    SDL_Window  *window = NULL;
-    SDL_Surface *screenSurface = NULL;
 
-    printf("starting init");
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0){
+int main( int argc, char* args[] )
+{
+	//The window we'll be rendering to
+	SDL_Window* window = NULL;
+	
+	//The surface contained by the window
+	SDL_Surface* screenSurface = NULL;
+
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ){
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-    }
-    else{
-        printf("creating window");
+	}
+	else{
 		//Create window
-		window = SDL_CreateWindow( "anthropos", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( window == NULL )
 		{
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		}
 		else
 		{
-            printf("creating surface");
 			//Get window surface
 			screenSurface = SDL_GetWindowSurface( window );
 
@@ -42,11 +47,21 @@ int main( int argc, char* args[] ){
 			SDL_UpdateWindowSurface( window );
             
             //Hack to get window to stay up
-            //SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0x00, 0x00, 0x00 ) );
+			/*
+            SDL_Event e;
+			bool quit = false;
+			while( quit == false ){
+				while( SDL_PollEvent( &e ) ){ 
+					if( e.type == SDL_QUIT ) 
+						quit = true; 
+				} 
+			}
+			*/
 		}
 	}
-    SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+
+
+	// new stuf
     printf("creating renderer");
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
@@ -83,9 +98,12 @@ int main( int argc, char* args[] ){
             {
                 break;
             }
+			SDL_UpdateWindowSurface( window );
             // Handle events
         }
 
+		//Update the surface
+		//SDL_UpdateWindowSurface( window );
         // "Frame" logic
         hitbox.x = (r * -1 * cos(2 * PI * x_pos)) + 300;
         hitbox.y = (r * -1 * sin(2 * PI * y_pos)) + 250;
@@ -96,7 +114,12 @@ int main( int argc, char* args[] ){
         --i, x_pos += PI/48, y_pos += PI/48;
     }
 
-    SDL_DestroyWindow( window );
-    SDL_Quit();
-    return 0;
+	//Destroy window
+	SDL_DestroyWindow( window );
+
+	//Quit SDL subsystems
+	SDL_Quit();
+
+	return 0;
 }
+
