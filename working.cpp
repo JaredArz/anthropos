@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string>
+#include <math.h>
 
 #define SCREEN_WIDTH  800
 #define SCREEN_HEIGHT 600

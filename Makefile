@@ -27,22 +27,25 @@ ifeq ($(uname_S),Darwin)
 endif
 
 #assumed true if MINGW FIXME
-ifneq (,$(findstring MINGW,$(uname_S)))
-	CC = x86_64-w64-mingw32-gcc
-	X = .exe
-	EXTLIBS += -lmingw32
-	SUPPORTED_OS = 1
-endif
-
-
-#ifeq ($(SUPPORTED_OS), 1)
-#	#echo $(OSWARNING)
-#	;
+#ifeq (0,${SUPPORTED_OS})
+#	CC = x86_64-w64-mingw32-gcc
+#	X = .exe
+#	EXTLIBS += -lmingw32
 #endif
+
+#FIXME doesnt detect WSL mingw
+#ifneq (,$(findstring MINGW,$(uname_S)))
+#	CC = x86_64-w64-mingw32-gcc
+#	X = .exe
+#	EXTLIBS += -lmingw32
+#	SUPPORTED_OS = 1
+#endif
+
 
 all: $(BINARY)
 
 $(BINARY): main.o
+	echo $(OSWARNING)
 	$(CC) $? $(EXTLIBS) -o $(@)$(X)
 
 main.o: main.cpp
