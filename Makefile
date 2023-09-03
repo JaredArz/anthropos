@@ -3,49 +3,27 @@
 #x86_64-w64-mingw32-gcc -o main64.exe main.c
 #g++ ./main_test.cpp -lSDL -o bin
 
-uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
-
-# universal variables
-OSWARNING = "compilation of this source may not be supported on your OS"
 CFLAGS    = -O2 -Wall
 BINARY    = anthropos
+CROSSCOMPILE = no
+EXTLIBS =
 
-# to be configured/added to, OS specific 
-CC =  
-X  =  
-EXTLIBS = -lSDL2main -lSDL2
-SUPPORTED_OS = 0 # set to 1 if a supported OS is detected
-
-ifeq ($(uname_S),Linux)
+### call with make all CROSSCOMPILE=yes to cross compile
+### otherwise, assumes a *nix enviornment (tested on OSX and Arch Linux) 
+ifeq ($(CROSSCOMPILE), yes)
+	CC = x86_64-w64-mingw32-gcc
+	X = .exe
+    EXTLIBS += -lmingw32
+else
 	CC = g++
-	SUPPORTED_OS = 1
+	X  =  
 endif
 
-ifeq ($(uname_S),Darwin)
-	CC = g++
-	SUPPORTED_OS = 1
-endif
-
-#assumed true if MINGW FIXME
-#ifeq (0,${SUPPORTED_OS})
-#	CC = x86_64-w64-mingw32-gcc
-#	X = .exe
-#	EXTLIBS += -lmingw32
-#endif
-
-#FIXME doesnt detect WSL mingw
-#ifneq (,$(findstring MINGW,$(uname_S)))
-#	CC = x86_64-w64-mingw32-gcc
-#	X = .exe
-#	EXTLIBS += -lmingw32
-#	SUPPORTED_OS = 1
-#endif
-
+EXTLIBS += -lSDL2main -lSDL2 -lSDL2_ttf
 
 all: $(BINARY)
 
 $(BINARY): main.o
-	echo $(OSWARNING)
 	$(CC) $? $(EXTLIBS) -o $(@)$(X)
 
 main.o: main.cpp
